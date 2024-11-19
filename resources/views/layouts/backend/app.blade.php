@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    {{-- <title>Admin | StarkLikes</title> --}}
+    <title>Admin | Help Together Group</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,12 +21,12 @@
     <div id="layout-wrapper">
         @include('layouts.backend.partials.header')
 
-        {{-- @include('layouts.backend.partials.sidenav') --}}
+        @include('layouts.backend.partials.sidenav')
 
         <!--[ Main Content ] start -->
         <div class="main-content">
             @yield('content')
-            {{-- @include('layouts.backend.partials.footer') --}}
+            @include('layouts.backend.partials.footer')
         </div>
 
     </div>

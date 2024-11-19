@@ -7,12 +7,13 @@ use Illuminate\Console\Command;
 use App\Mail\ExpirationReminderMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Products;
+use App\Http\Controllers\Admin\SMSController;
 use Carbon\Carbon;
 
 class SendExpirationReminders extends Command
 {
     protected $signature = 'send:expiry';
-    protected $description = 'Send emails to clients 15 days before expiry date';
+    protected $description = 'Your Product plan is expired after 15 days';
 
     public function __construct()
     {
@@ -20,37 +21,22 @@ class SendExpirationReminders extends Command
     }
     public function handle()
     {
-        $tenDaysFromNow = Carbon::now()->addDays(10);
-        // $tenDaysFromNow = Carbon::now()->format('Y-m-d');
-
-        // $clients = Products::where('expiry_date', '<=', $tenDaysFromNow)
-        //     ->get();
-        $clients = Entry::where('expiry_date', '<=', $tenDaysFromNow)
+        // $tomorrow = now()->addDay(0)->toDateString();
+        $fifteenDaysFromNow = now()->addDays(15)->toDateString();
+        $clients = Products::whereDate('products.expiry_date', $fifteenDaysFromNow)
+            ->join('entries', 'products.entry_id', '=', 'entries.id')
+            ->select('products.*', 'entries.*')
             ->get();
 
+        // dd($clients);
         foreach ($clients as $client) {
+            $smsTemplateId = env('BEFORE_EXPIRY_EMPLATE_ID');
+            $message = "Hi" . $client->entry->contact . ", We noticed that your services with Help Together Group has expired. We’d love to have you back! Please renew soon to continue enjoying our services. Contact us: +91 96346 44622";
+            $message = "Your Services with Help Together Group is up for renewal. Please renew by" . $client->entry->contact . " to avoid interruptions. For More Info Call us  +91 96346 44622.";
+            SMSController::sendSms($smsTemplateId, $message, $client->entry->contactno);
             Mail::to($client->entry->email)->send(new ExpirationReminderMail($client));
-
-            $client->is_notified = true;
-            $client->save();
         }
 
         $this->info('Expiration reminders sent successfully.');
     }
-    // public function handle()
-    // {
-    //     $currentDate = Carbon::now();
-
-    //     $expiryDate = $currentDate->addDays(30);
-
-
-    //     $clients = Products::whereDate('expiry_date', $expiryDate)->get();
-
-    //     foreach ($clients as $client) {
-    //         Mail::to($client->entry->email)->send(new ExpirationReminderMail($client));
-    //     }
-
-    //     $this->info('Expiry notifications sent successfully!');
-    // }
-
 }

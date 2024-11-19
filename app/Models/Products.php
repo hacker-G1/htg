@@ -15,6 +15,7 @@ class Products extends Model
         'entry_id',
         'product_name',
         'total_amount',
+        'paid_amount',
         'balance_amount',
         'validity',
         'expiry_date',

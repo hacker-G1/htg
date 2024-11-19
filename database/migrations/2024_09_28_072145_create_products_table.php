@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->foreignId('entry_id')->constrained()->onDelete('cascade');
             $table->decimal('total_amount', 8, 2)->nullable();
+            $table->string('paid_amount')->nullable();
             $table->decimal('balance_amount', 8, 2)->nullable();
             $table->string('validity')->nullable();
             $table->date('expiry_date')->nullable();

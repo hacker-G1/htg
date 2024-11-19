@@ -9,7 +9,7 @@ class Entry extends Model
 {
     use HasFactory;
 
-    protected $table ='entries';
+    protected $table = 'entries';
 
     protected $fillable = [
         'company',
@@ -34,7 +34,9 @@ class Entry extends Model
         'state',
     ];
 
-    public function product(){
-        return $this->belongsTo(Products::class);
+    public function product()
+    {
+        return $this->hasMany(Products::class);
     }
+
 }

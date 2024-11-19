@@ -88,8 +88,30 @@
 
         <div class="service-details">
             <strong>Service Details:</strong>
-            <p>Service Name: <b>[Product/Service]</b></p>
-            <p>Renewal Date: <b>[Date]</b></p>
+            {{-- <p>Service Name: <b>[Product/Service]</b></p>
+            <p>Renewal Date: <b>[Date]</b></p> --}}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Total Amount</th>
+                        <th>Balance Amount</th>
+                        <th>Validity</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($productDetails as $product)
+                        <tr>
+                            <td>{{ $product['product_name'] }}</td>
+                            <td>{{ $product['total_amount'] }}</td>
+                            <td>{{ $product['balance_amount'] }}</td>
+                            <td>{{ $product['validity'] }}</td>
+                            <td>{{ $product['expiry_date'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
 
         <p>We’ve enjoyed partnering with you and hope you’ve found our services beneficial. Renewing your service will

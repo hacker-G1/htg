@@ -23,7 +23,8 @@
                     @method('PATCH')
                     @csrf
                     <div class="col-md-6">
-                        <input type="date" name="date" class="form-control" id="inputEmail4">
+                        <input type="date" name="date" value="{{ $entries->date }}" class="form-control"
+                            id="inputEmail4">
                     </div>
                     <div class="col-md-6">
                         <select id="type" name="type" class="form-select">
@@ -58,25 +59,26 @@
                     </div>
                     <div class="col-md-3">
                         <select name="type1" class="form-select">
-                            <option selected>Self/Tally</option>
+                            <option value="">Self/Tally</option>
                             <option value="self" {{ $entries->type1 == 'self' ? 'selected' : '' }}>Self</option>
                             <option value="tally" {{ $entries->type1 == 'tally' ? 'selected' : '' }}>Tally</option>
                         </select>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="totalamount"
-                                value="{{ $entries->totalamount }}" placeholder="Total Amount">
+                            <input type="text" class="form-control" name="totalamount" value="{{ $totalAmount }}"
+                                placeholder="Total Amount" readonly>
                         </div>
                         <div class="col-md-6">
                             <input type="text" class="form-control" name="receivedamount"
-                                value="{{ $entries->receivedamount }}" placeholder="Received Amount">
+                                value="{{ $totalPayment }}" placeholder="Received Amount" readonly>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <select name="payment" class="form-select">
-                            <option selected>Payment Mode</option>
-                            <option value="Onlion" {{ $entries->payment == 'Onlion' ? 'selected' : '' }}>Onlion</option>
+                            <option value="">Payment Mode</option>
+                            <option value="Onlion" {{ $entries->payment == 'Onlion' ? 'selected' : '' }}>Onlion
+                            </option>
                             <option value="Cash" {{ $entries->payment == 'Cash' ? 'selected' : '' }}>Cash</option>
                         </select>
                     </div>
@@ -86,8 +88,8 @@
                     </div>
                     <div class="col-12">
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="remark" value="{{ $entries->remark }}"
-                                placeholder="Remark">
+                            <input type="text" class="form-control" name="remark"
+                                value="{{ $entries->remark }}" placeholder="Remark">
                         </div>
                     </div>
                     <div class="image col-md-6">
@@ -95,62 +97,90 @@
                     </div>
             </div>
         </div>
-
+        <?php
+        $all_products = ['Local Keyword SEO', 'Virtual Tour', 'Google Business Profile Management', 'Zonal Keyword SEO', 'Google Ads', 'Google Ads Recharge', 'Meta Ads Management', 'Facebook Ads Recharge', 'Social Media Management', 'Website Design', 'Custom Development', 'Website Amc', 'Product Photography', 'Domain', 'Hosting', 'QR Code', 'Web SEO', 'Others'];
+        ?>
         <div class="card col-lg-6 ms-2 mt-2 p-3">
             <div class="row">
                 <div class="col-3">
                     <h5>Product</h5>
                 </div>
-                <div class="col-3">
-                    <h5>Validity</h5>
-                </div>
-                <div class="col-3">
-                    <h5>Total Amount</h5>
-                </div>
-                <div class="col-3">
-                    <h5>Balance Amount</h5>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-3">
+                            <h5>Validity</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>Total Amount</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>Paid Amount</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>New Amount</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
+            <?php
+            $count = 0;
+            $selected_products = array();
+            foreach($products as $product_db){
+                $selected_products[] = $product_db->product_name;
+            }
+            foreach($all_products as $product){
+                $checkbox_id = $count+1;
+                $selected = false;
+                $tot_amt = 0;
+                $paid_amt = 0;
+                $bal_amt = 0;
+                $validity = '';
+                foreach($products as $product_db){
+                    if($product_db->product_name == $product){
+                        $validity = $product_db->validity;
+                        $selected = true;
+                        $tot_amt = $product_db->total_amount;
+                        $paid_amt = $product_db->paid_amount;
+                        $bal_amt = $product_db->balance_amount;
+                        break;
+                    }
+                }
+            ?>
+            <div class="row <?= $count > 0 ? 'mt-1' : '' ?>">
                 <div class="col-3">
                     <label>
-                        <input type="checkbox" id="checkbox1" name="products[0][name]" value="Local Keyword SEO"
-                            class="toggle-fields"> Local Keyword SEO
+                        <input type="checkbox" id="checkbox<?= $checkbox_id ?>"
+                            name="products[{{ $count }}][name]" value="{{ $product }}"
+                            class="toggle-fields" <?= $selected ? 'checked' : '' ?>> {{ $product }}
                     </label>
                 </div>
-                <div id="fields1" class="fields col-9" style="display: none;">
-                    <select name="products[0][validity]">
-                        <option selected>Select Validity</option>
-                        <option>1 Month</option>
-                        <option>3 Months</option>
-                        <option>4 Months</option>
-                        <option>6 Months</option>
-                        <option>12 Months</option>
-                    </select>
-                    <input type="text" name="products[0][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[0][balance_amount]" placeholder="balance_amount">
+                <div id="fields<?= $checkbox_id ?>" class="fields col-9" style="display: none;">
+                    <div class="row">
+                        <select name="products[{{ $count }}][validity]" class="col-3">
+                            <option selected>Select Validity</option>
+                            <option {{ $validity == '1 Month' ? 'selected' : '' }}>1 Month</option>
+                            <option {{ $validity == '3 Months' ? 'selected' : '' }}>3 Months</option>
+                            <option {{ $validity == '4 Months' ? 'selected' : '' }}>4 Months</option>
+                            <option {{ $validity == '6 Months' ? 'selected' : '' }}>6 Months</option>
+                            <option {{ $validity == '12 Months' ? 'selected' : '' }}>12 Months</option>
+                            <option {{ $validity == '24 Months' ? 'selected' : '' }}>24 Months</option>
+                            <option {{ $validity == '36 Months' ? 'selected' : '' }}>36 Months</option>
+                            <option {{ $validity == 'Lifetime' ? 'selected' : '' }}>Lifetime</option>
+                        </select>
+                        <input class="col-3" type="text" name="products[{{ $count }}][total_amount]"
+                            value="{{ $tot_amt }}" placeholder="total_amount">
+                        <input class="col-3" type="text" name="products[{{ $count }}][old_paid_amount]"
+                            value="{{ $paid_amt }}" readonly>
+                        <input class="col-3" type="text" name="products[{{ $count }}][paid_amount]"
+                            value="" placeholder="">
+                    </div>
                 </div>
             </div>
-            <div class="row mt-1">
-                <div class="col-3">
-                    <label>
-                        <input type="checkbox" id="checkbox2" name="products[1][name]" value="Virtual Tour"
-                            class="toggle-fields"> Virtual Tour
-                    </label>
-                </div>
-                <div id="fields2" class="fields col-9" style="display: none;">
-                    <select name="products[1][validity]">
-                        <option selected>Select Validity</option>
-                        <option>1 Month</option>
-                        <option>3 Months</option>
-                        <option>4 Months</option>
-                        <option>6 Months</option>
-                        <option>12 Months</option>
-                    </select>
-                    <input type="text" name="products[1][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[1][balance_amount]" placeholder="balance_amount">
-                </div>
-            </div>
+            <?php
+                $count++;
+            } ?>
+            <?php /*?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+            ?>
             <div class="row mt-1">
                 <div class="col-3">
                     <label>
@@ -169,7 +199,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[2][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[2][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[2][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -189,7 +219,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[3][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[3][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[3][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -209,7 +239,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[4][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[4][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[4][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -229,7 +259,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[5][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[5][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[5][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -249,7 +279,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[6][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[6][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[6][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -269,7 +299,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[7][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[7][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[7][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -289,7 +319,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[8][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[8][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[8][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -309,7 +339,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[9][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[9][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[9][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -329,7 +359,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[10][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[10][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[10][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -349,7 +379,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[11][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[11][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[11][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -369,7 +399,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[12][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[12][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[12][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -389,7 +419,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[13][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[13][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[13][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -409,7 +439,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[14][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[14][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[14][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -429,7 +459,7 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[15][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[15][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[15][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
             <div class="row mt-1">
@@ -449,9 +479,10 @@
                         <option>12 Months</option>
                     </select>
                     <input type="text" name="products[16][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[16][balance_amount]" placeholder="balance_amount">
+                    <input type="text" name="products[16][paid_amount]" placeholder="paid_amount">
                 </div>
             </div>
+            <?php */?>
         </div>
         <div class="col-lg-12">
             <div class="card action-btn text-center">
@@ -470,17 +501,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- <script>
-        $(document).ready(function() {
-            $('.toggle-fields').change(function() {
-                if (this.checked) {
-                    $('#fields' + this.id.slice(-1)).show();
-                } else {
-                    $('#fields' + this.id.slice(-1)).hide();
-                }
-            });
-        });
-    </script> --}}
+
 
     <script>
         $(document).ready(function() {
@@ -488,6 +509,14 @@
                 var checkboxId = this.id.replace('checkbox', '');
                 $('#fields' + checkboxId).toggle(this.checked);
             });
+            var selected_products_string = '<?= implode(',', $selected_products) ?>';
+            var selected_products = selected_products_string.split(",");
+            console.log(selected_products);
+            $('.toggle-fields').each(function() {
+                var checkboxId = this.id.replace('checkbox', '');
+                $('#fields' + checkboxId).toggle(this.checked);
+            });
+
         });
     </script>
 </body>

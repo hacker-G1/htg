@@ -32,10 +32,17 @@ class ExpirationReminderMail extends Mailable
     /**
      * Get the message content definition.
      */
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'emails.expiration_reminder',
+    //     );
+    // }
     public function content(): Content
     {
         return new Content(
             view: 'emails.expiration_reminder',
+            // with: ['client' => $this->client]
         );
     }
 

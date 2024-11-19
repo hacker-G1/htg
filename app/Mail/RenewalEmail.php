@@ -14,13 +14,15 @@ class RenewalEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $data;
+    public $productDetails;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct($data , $productDetails)
     {
         $this->data = $data;
+        $this->productDetails = $productDetails;
     }
 
     /**
@@ -42,6 +44,14 @@ class RenewalEmail extends Mailable
             view: 'emails.renewal',
         );
     }
+
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'emails.renewal',
+    //         with: ['data' => $this->data, 'productDetails' => $this->productDetails]
+    //     );
+    // }
 
     /**
      * Get the attachments for the message.

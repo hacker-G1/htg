@@ -14,9 +14,11 @@ class ConfirmMail extends Mailable
     use Queueable, SerializesModels;
 
     public $data;
-    public function __construct($data)
+    public $productDetails;
+    public function __construct($data, $productDetails)
     {
         $this->data = $data;
+        $this->productDetails = $productDetails;
     }
 
     /**
@@ -25,7 +27,7 @@ class ConfirmMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirm Mail',
+            subject: 'Renewal Mail',
         );
     }
 

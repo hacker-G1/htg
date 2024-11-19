@@ -60,8 +60,30 @@
         <div class="content">
             <p>Dear {{ $data['contact'] }},</p>
             <p>Thank you for choosing Help Together Group. We’re thrilled to have you with us!</p>
-            <p>Your purchase of [Product/Service] is an excellent choice, and we hope it meets all your expectations.
-                Our team is dedicated to providing the best service possible and ensuring your satisfaction.</p>
+            <p>Your purchase of
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Total Amount</th>
+                        <th>Balance Amount</th>
+                        <th>Validity</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($productDetails as $product)
+                        <tr>
+                            <td>{{ $product['product_name'] }}</td>
+                            <td>{{ $product['total_amount'] }}</td>
+                            <td>{{ $product['balance_amount'] }}</td>
+                            <td>{{ $product['validity'] }}</td>
+                            <td>{{ $product['expiry_date'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table> is an excellent choice, and we hope it meets all your expectations.
+            Our team is dedicated to providing the best service possible and ensuring your satisfaction.</p>
             <p>If you have any questions or need assistance, our support team is here to help from 10:00am to 06:00pm
                 IST. You can reach us at <a href="mailto:support@helptogethergroup.com">support@helptogethergroup.com</a>
                 or +91 9634644622.</p>

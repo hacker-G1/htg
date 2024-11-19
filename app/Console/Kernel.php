@@ -12,8 +12,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // ReminderPlan schedule
         $schedule->command('send:expiry')->daily();
-        // $schedule->command('notify:expiry')->dailyAt('09:00');
+
+        // ExpiredPlan schedule
+        $schedule->command('send:expired')->daily();
     }
 
 

@@ -55,9 +55,11 @@
         <p>Dear {{ $data['contact'] }},</p>
         <p>We are pleased to inform you that your [Product/Service] with Help Together Group has been successfully renewed.</p>
         <div class="details">
-            <p><strong>Service Name:</strong> [Product/Service]</p>
-            <p><strong>New Service Period:</strong> [Start Date] to [End Date]</p>
+            @foreach ($productDetails as $product)
+            <p><strong>Service Name:</strong> {{ $product['product_name'] }}</p>
+            <p><strong>New Service Period:</strong> {{ $data['date'] }} to {{ $product['expiry_date'] }}</p>
             <p><strong>Transaction ID:</strong> [Transaction ID]</p>
+            @endforeach
         </div>
         <p>Thank you for continuing to trust us with your business needs. We are committed to providing you with exceptional service and support throughout this new service period.</p>
         <p>If you have any questions or need assistance, our support team is available from 10:00am to 06:00pm IST. You can reach us at <a href="mailto:support@helptogethergroup.com">support@helptogethergroup.com</a> or call us at +91 9634644622.</p>

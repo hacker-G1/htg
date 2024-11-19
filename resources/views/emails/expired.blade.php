@@ -55,8 +55,8 @@
 
 <body>
     <div class="container">
-        <h1>Your Service Plan Has Expired after 15 days, {{ $client->contact }}</h1>
-        {{-- <p>Dear {{ $data['contact'] }},</p> --}}
+        <h1>Your Service Plan Has Expired, {{ $client->contact }}</h1>
+        <p>Dear {{ $client->contact }},</p>
         <p>We hope this message finds you well. We wanted to inform you that your {{ $client->product_name}} plan with Help
             Together Group has expired as of {{ $client->expiry_date}}.</p>
 

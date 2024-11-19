@@ -13,12 +13,14 @@ class ExpiryMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $client;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($client)
     {
-        //
+        $this->client = $client;
     }
 
     /**
@@ -27,7 +29,7 @@ class ExpiryMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Expiry Mail',
+            subject: 'Your Plan is Expired',
         );
     }
 
@@ -37,7 +39,7 @@ class ExpiryMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.expired',
         );
     }
 

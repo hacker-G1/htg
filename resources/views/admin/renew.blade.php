@@ -1,7 +1,7 @@
 @extends('layouts.backend.app')
 
 @section('meta')
-    <title>Add New | Admin</title>
+    <title>Renew | Admin</title>
 @endsection
 @section('content')
     <!--[ Page Content ] start -->
@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Add New Service</h4>
+                        <h4 class="mb-sm-0 font-size-18">Renew Service</h4>
 
                         <div class="page-title-right">
                             <a href="{{ url('/index') }}" class="btn btn-primary waves-effect waves-light"><i
@@ -32,33 +32,38 @@
                                 <input type="date" name="date" class="form-control" id="inputEmail4">
                             </div>
                             <div class="col-md-6">
-                                <select id="type" name="type" class="form-select">
+                                <select name="type" class="form-select">
                                     {{-- <option value="">New/Renew</option> --}}
-                                    <option value="new" selected>New</option>
-                                    {{-- <option value="renew">Renew</option> --}}
+                                    {{-- <option value="new">New</option> --}}
+                                    <option value="renew" selected>Renew</option>
                                 </select>
                             </div>
                             <div class="col-12">
-                                <input type="text" class="form-control" name="company" placeholder="Company Name">
+                                <input type="text" id="company_name" class="form-control" name="company"
+                                    placeholder="Company Name">
                             </div>
                             <div class="col-12">
-                                <input type="text" class="form-control" name="address" placeholder="Address">
+                                <input type="text" id="address" class="form-control" name="address"
+                                    placeholder="Address" readonly>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="gst" placeholder="GST Number">
+                                <input type="text" id="gst" class="form-control" name="gst"
+                                    placeholder="GST Number" readonly>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="contact" placeholder="Contact Person">
+                                <input type="text" id="contact" class="form-control" name="contact"
+                                    placeholder="Contact Person" readonly>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="contactno" placeholder="Contact Number">
+                                <input type="text" id="contactno" class="form-control" name="contactno"
+                                    placeholder="Contact Number" readonly>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="email" placeholder="Contact Email"
-                                    required>
+                                <input type="text" id="email" class="form-control" name="email"
+                                    placeholder="Contact Email" required readonly>
                             </div>
                             <div class="col-md-3">
-                                <select name="type1" class="form-select">
+                                <select name="type1" id="type1" class="form-select">
                                     <option value="">Self/Tally</option>
                                     <option value="self">Self</option>
                                     <option value="tally">Tally</option>
@@ -75,18 +80,20 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <select name="payment" class="form-select">
+                                <select name="payment" id="payment" class="form-select">
                                     <option value="">Payment Mode</option>
                                     <option>Onlion</option>
                                     <option>Cash</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <input type="text" class="form-control" name="bdmname" placeholder="BDM Name">
+                                <input type="text" id="bdmname" class="form-control" name="bdmname"
+                                    placeholder="BDM Name" readonly>
                             </div>
                             <div class="col-12">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="remark" placeholder="Remark">
+                                    <input type="text" id="remark" class="form-control" name="remark"
+                                        placeholder="Remark" readonly>
                                 </div>
                             </div>
                             <div class="image col-md-6">
@@ -128,8 +135,7 @@
                             <label>
                                 <input type="checkbox" id="checkbox<?= $checkbox_id ?>"
                                     name="products[{{ $count }}][name]" value="{{ $product }}"
-                                    class="toggle-fields">
-                                {{ $product }}
+                                    class="toggle-fields"> {{ $product }}
                             </label>
                         </div>
                         <div id="fields<?= $checkbox_id ?>" class="fields col-9" style="display: none;">
@@ -141,9 +147,6 @@
                                     <option value="4 Months">4 Months</option>
                                     <option value="6 Months">6 Months</option>
                                     <option value="12 Months">12 Months</option>
-                                    <option value="24 Months">24 Months</option>
-                                    <option value="36 Months">36 Months</option>
-                                    <option value="Lifetime">Lifetime</option>
                                 </select>
                                 <input class="col-3" type="text" name="products[{{ $count }}][total_amount]"
                                     placeholder="total_amount">
@@ -154,63 +157,6 @@
                     <?php
                 $count++;
             } ?>
-
-                    {{-- <div class="card col-lg-6 ms-2 mt-2 p-3">
-            <div class="row">
-                <div class="col-3">
-                    <h5>Product</h5>
-                </div>
-                <div class="col-3">
-                    <h5>Validity</h5>
-                </div>
-                <div class="col-3">
-                    <h5>Total Amount</h5>
-                </div>
-                <div class="col-3">
-                    <h5>Balance Amount</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-3">
-                    <label>
-                        <input type="checkbox" id="checkbox1" name="products[0][name]" value="Local Keyword SEO"
-                            class="toggle-fields"> Local Keyword SEO
-                    </label>
-                </div>
-                <div id="fields1" class="fields col-9" style="display: none;">
-                    <select name="products[0][validity]">
-                        <option value="">Select Validity</option>
-                        <option value="1 Month">1 Month</option>
-                        <option value="3 Months">3 Months</option>
-                        <option value="4 Months">4 Months</option>
-                        <option value="6 Months">6 Months</option>
-                        <option value="12 Months">12 Months</option>
-                    </select>
-                    <input type="text" name="products[0][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[0][paid_amount]" placeholder="paid_amount">
-                </div>
-            </div>
-            <div class="row mt-1">
-                <div class="col-3">
-                    <label>
-                        <input type="checkbox" id="checkbox2" name="products[1][name]" value="Virtual Tour"
-                            class="toggle-fields"> Virtual Tour
-                    </label>
-                </div>
-                <div id="fields2" class="fields col-9" style="display: none;">
-                    <select name="products[1][validity]">
-                        <option value="">Select Validity</option>
-                        <option value="1 Month">1 Month</option>
-                        <option value="3 Months">3 Months</option>
-                        <option value="4 Months">4 Months</option>
-                        <option value="6 Months">6 Months</option>
-                        <option value="12 Months">12 Months</option>
-                    </select>
-                    <input type="text" name="products[1][total_amount]" placeholder="total_amount">
-                    <input type="text" name="products[1][paid_amount]" placeholder="paid_amount">
-                </div>
-            </div> --}}
-
                     <div class="col-lg-12 mt-3">
                         <div class="card action-btn text-center">
                             <div class="card-body p-2">
@@ -224,20 +170,82 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
 
-    @section('script')
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-        </script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@section('script')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script>
-            $(document).ready(function() {
-                $('.toggle-fields').change(function() {
-                    var checkboxId = this.id.replace('checkbox', '');
-                    $('#fields' + checkboxId).toggle(this.checked);
-                });
+    <script>
+        $(document).ready(function() {
+            $('.toggle-fields').change(function() {
+                var checkboxId = this.id.replace('checkbox', '');
+                $('#fields' + checkboxId).toggle(this.checked);
             });
-        </script>
-    @endsection
+        });
+    </script>
+
+    {{-- autofill get data --}}
+    <script>
+        $(document).ready(function() {
+            $('#company_name').on('keyup', function() {
+                let companyName = $(this).val();
+
+                if (companyName.length > 0) {
+                    $.ajax({
+                        url: `/get-company-data/${companyName}`,
+                        type: 'GET',
+                        success: function(data) {
+                            if (data) {
+                                $('#email').val(data.email);
+                                $('#address').val(data.address);
+                                $('#contactno').val(data.contactno);
+                                $('#gst').val(data.gst);
+                                $('#type').val(data.type);
+                                $('#type1').val(data.type1);
+                                $('#contact').val(data.contact);
+                                $('#payment').val(data.payment);
+                                $('#bdmname').val(data.bdmname);
+                                $('#remark').val(data.remark);
+                                $('#state').val(data.state);
+                                $('#payment').val(data.payment);
+                            } else {
+                                $('#email').val('');
+                                $('#address').val('');
+                                $('#contactno').val('');
+                                $('#gst').val('');
+                                $('#type').val('');
+                                $('#type1').val('');
+                                $('#contact').val('');
+                                $('#payment').val('');
+                                $('#bdmname').val('');
+                                $('#remark').val('');
+                                $('#state').val('');
+                                $('#payment').val('');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error(xhr);
+                        }
+                    });
+                } else {
+                    $('#email').val('');
+                    $('#address').val('');
+                    $('#contactno').val('');
+                    $('#gst').val('');
+                    $('#type').val('');
+                    $('#type1').val('');
+                    $('#contact').val('');
+                    $('#payment').val('');
+                    $('#bdmname').val('');
+                    $('#remark').val('');
+                    $('#state').val('');
+                    $('#payment').val('');
+                }
+            });
+        });
+    </script>
+@endsection
